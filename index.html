@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -257,46 +257,27 @@
     <!-- Footer -->
     <footer>
         <div class="footer-container">
-            <span class="copyright">Copyright Â© 2026 Premier Lending Inc. | Internal Use Only</span>
+            <span class="copyright">Copyright Ã‚Â© 2026 Premier Lending Inc. | Internal Use Only</span>
             <span class="footer-links">Site Architect: Faris Faraj (CO-CEO) | Admin Contact: Kevin (RPM)</span>
         </div>
     </footer>
 
-        <script>
+            <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 1. Personalized Welcome
-        var heroTitle = document.querySelector('.hero-content h1');
-        if (heroTitle) {
-            var userName = localStorage.getItem('premierHubName');
-            if (!userName) {
-                // Prompt the user on their very first visit
-                userName = prompt('Welcome! Please enter your name to personalize your dashboard:');
-                if (userName && userName.trim() !== "") {
-                    localStorage.setItem('premierHubName', userName.trim());
-                } else {
-                    userName = "Team"; // Fallback
-                }
-            }
-            if (userName) {
-                heroTitle.innerText = "Welcome, " + userName + "!";
-            }
-        }
+        // 1. Personalized Welcome Removed By Request
 
-        // 2. Interactive Thumbs Up (Liking comments)
+        // 2. Interactive Thumbs Up
         var interactions = document.querySelectorAll('.interaction');
         interactions.forEach(function(btn) {
             if (btn.innerHTML.includes('thumbs-up')) {
                 btn.style.cursor = 'pointer';
-                btn.title = "Like this update";
+                btn.title = 'Like this update';
                 btn.addEventListener('click', function() {
                     var icon = this.querySelector('i');
                     if (icon.classList.contains('fa-regular')) {
-                        // Change to solid, change color, and increment number
                         icon.classList.remove('fa-regular');
                         icon.classList.add('fa-solid');
-                        icon.style.color = '#df7a1c'; // Brand Orange
-                        
-                        // Parse count safely and increment
+                        icon.style.color = '#df7a1c';
                         var textNode = this.childNodes[this.childNodes.length - 1];
                         var count = parseInt(textNode.textContent) || 0;
                         textNode.textContent = " " + (count + 1);
@@ -305,108 +286,253 @@
             }
         });
 
-        // 3. functional Search Bar with instant Dropdown results
-        var searchInputs = document.querySelectorAll('input[placeholder*="Search"]');
-        
-        // Let's create a fake library of documents for the dropdown!
-        var database = [
-            { name: "Day 1 New Hire Checklist", url: "onboarding.html" },
-            { name: "LO Licensing Requirements", url: "policies-procedures.html" },
-            { name: "Processor Role SOP", url: "policies-procedures.html" },
-            { name: "Rate Lock Policy", url: "policies-procedures.html" },
-            { name: "Conventional Product Guidelines", url: "product-guidelines.html" },
-            { name: "Marketing Collateral - FHA", url: "resources.html" },
-            { name: "Systems Access Request Form", url: "onboarding.html" }
+        // 3. Modern Spotlight Search
+        // Build the full metadata database so everything works natively
+        var libraryDocs = [
+            { name: "LO Licensing Requirements", meta: "Policy | Loan Officer", type: "policy", url: "policies-procedures.html" },
+            { name: "First 30 Days – Milestone Tracker", meta: "Template | Loan Officer", type: "template", url: "onboarding.html" },
+            { name: "Technology Setup Guide", meta: "SOP | All Staff", type: "sop", url: "onboarding.html" },
+            { name: "Branch Introduction Packet", meta: "Training | Loan Officer", type: "training", url: "onboarding.html" },
+            { name: "Processor Role SOP", meta: "SOP | Processor", type: "sop", url: "policies-procedures.html" },
+            { name: "Disclosure Timing Policy", meta: "Policy | All Staff", type: "policy", url: "policies-procedures.html" },
+            { name: "Rate Lock Policy", meta: "Policy | Loan Officer", type: "policy", url: "policies-procedures.html" },
+            { name: "Compensation Plan Overview", meta: "Policy | Loan Officer", type: "policy", url: "policies-procedures.html" },
+            { name: "Branch Operating Procedures", meta: "SOP | All Staff", type: "sop", url: "policies-procedures.html" },
+            { name: "Escalation & Complaint Handling", meta: "SOP | All Staff", type: "sop", url: "policies-procedures.html" },
+            { name: "Conventional Product Guidelines", meta: "Guideline | Loan Officer", type: "guideline", url: "product-guidelines.html" },
+            { name: "FHA Product Guidelines", meta: "Guideline | Loan Officer", type: "guideline", url: "product-guidelines.html" },
+            { name: "VA Product Guidelines", meta: "Guideline | Loan Officer", type: "guideline", url: "product-guidelines.html" },
+            { name: "USDA Product Guidelines", meta: "Guideline | Loan Officer", type: "guideline", url: "product-guidelines.html" },
+            { name: "AIM Shared Appreciation Mortgage Guidelines", meta: "Guideline | All Staff", type: "guideline", url: "product-guidelines.html" },
+            { name: "Bridge Loan Guidelines", meta: "Guideline | Jumbo", type: "guideline", url: "product-guidelines.html" },
+            { name: "Non-QM Product Profile", meta: "Guideline | Broker", type: "guideline", url: "product-guidelines.html" },
+            { name: "Manufactured Housing Playbook", meta: "Guideline | All Channels", type: "guideline", url: "product-guidelines.html" },
+            { name: "Anti-Money Laundering (AML) Policy", meta: "Policy | All Staff", type: "policy", url: "compliance.html" },
+            { name: "Fair Lending Policy", meta: "Policy | All Staff", type: "policy", url: "compliance.html" },
+            { name: "Information Security Policy", meta: "Policy | All Staff", type: "policy", url: "compliance.html" },
+            { name: "TRID Compliance Guide", meta: "Guideline | Setup", type: "guideline", url: "compliance.html" },
+            { name: "HMDA Reporting Procedures", meta: "SOP | Operations", type: "sop", url: "compliance.html" },
+            { name: "FCRA Compliance Manual", meta: "SOP | All Staff", type: "sop", url: "compliance.html" }
         ];
 
-        searchInputs.forEach(function(input) {
-            // Create a wrapper for the dropdown to sit inside
-            var wrapper = document.createElement('div');
-            wrapper.style.position = 'relative';
-            wrapper.style.width = '100%';
-            input.parentNode.insertBefore(wrapper, input);
-            wrapper.appendChild(input);
-
-            // Create the dropdown menu
-            var dropdown = document.createElement('div');
-            dropdown.style.position = 'absolute';
-            dropdown.style.top = '100%';
-            dropdown.style.left = '0';
-            dropdown.style.right = '0';
-            dropdown.style.background = '#fff';
-            dropdown.style.border = '1px solid #ccc';
-            dropdown.style.borderRadius = '4px';
-            dropdown.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-            dropdown.style.marginTop = '4px';
-            dropdown.style.zIndex = '100';
-            dropdown.style.display = 'none';
-            dropdown.style.maxHeight = '200px';
-            dropdown.style.overflowY = 'auto';
-            dropdown.style.color = '#333';
-            dropdown.style.textAlign = 'left';
-            wrapper.appendChild(dropdown);
-
-            // Listen to typing events
-            input.addEventListener('input', function(e) {
-                var term = e.target.value.toLowerCase();
-                dropdown.innerHTML = ''; // Clear old results
-
-                if (term.length < 2) {
-                    dropdown.style.display = 'none';
-                    return;
+        // Create the Modern Search Overlay HTML
+        var searchOverlay = document.createElement('div');
+        searchOverlay.id = "modern-search-overlay";
+        searchOverlay.innerHTML = `
+            <style>
+                #modern-search-overlay {
+                    position: fixed;
+                    top: 0; left: 0; right: 0; bottom: 0;
+                    background: rgba(15, 23, 42, 0.85);
+                    backdrop-filter: blur(8px);
+                    -webkit-backdrop-filter: blur(8px);
+                    z-index: 999999;
+                    display: none;
+                    align-items: flex-start;
+                    justify-content: center;
+                    padding-top: 10vh;
+                    opacity: 0;
+                    transition: opacity 0.2s ease;
                 }
-
-                // Filter database
-                var results = database.filter(function(item) {
-                    return item.name.toLowerCase().includes(term);
-                });
-
-                if (results.length > 0) {
-                    dropdown.style.display = 'block';
-                    results.forEach(function(res) {
-                        var option = document.createElement('a');
-                        option.href = res.url;
-                        option.style.display = 'block';
-                        option.style.padding = '10px 15px';
-                        option.style.textDecoration = 'none';
-                        option.style.color = '#333';
-                        option.style.borderBottom = '1px solid #eee';
-                        option.style.fontSize = '0.9rem';
-                        
-                        option.addEventListener('mouseover', function() { this.style.backgroundColor = '#f0f3f6'; });
-                        option.addEventListener('mouseout', function() { this.style.backgroundColor = 'transparent'; });
-                        
-                        option.innerHTML = '<i class="fa-solid fa-file-lines" style="color:#df7a1c; margin-right:8px;"></i>' + res.name;
-                        dropdown.appendChild(option);
-                    });
-                } else {
-                    dropdown.style.display = 'block';
-                    var noRes = document.createElement('div');
-                    noRes.style.padding = '10px 15px';
-                    noRes.style.fontSize = '0.9rem';
-                    noRes.style.color = '#888';
-                    noRes.innerText = "No results found.";
-                    dropdown.appendChild(noRes);
+                .modern-search-box {
+                    background: #fff;
+                    width: 90%;
+                    max-width: 650px;
+                    border-radius: 16px;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    transform: scale(0.95);
+                    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 }
-            });
-
-            // Hide dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!wrapper.contains(e.target)) {
-                    dropdown.style.display = 'none';
+                .modern-search-header {
+                    display: flex;
+                    align-items: center;
+                    padding: 0 24px;
+                    border-bottom: 1px solid #e2e8f0;
                 }
+                .modern-search-header i {
+                    font-size: 1.25rem;
+                    color: #94a3b8;
+                }
+                .modern-search-input {
+                    flex: 1;
+                    padding: 24px 16px;
+                    border: none;
+                    font-size: 1.25rem;
+                    outline: none;
+                    color: #1e293b;
+                    background: transparent;
+                }
+                .modern-search-close {
+                    background: #f1f5f9;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 6px 10px;
+                    font-size: 0.75rem;
+                    color: #64748b;
+                    font-weight: 700;
+                    cursor: pointer;
+                }
+                .modern-search-close:hover { background: #e2e8f0; }
+                .modern-search-results {
+                    max-height: 400px;
+                    overflow-y: auto;
+                    padding: 12px;
+                }
+                .search-result-item {
+                    display: flex;
+                    align-items: center;
+                    padding: 16px;
+                    border-radius: 12px;
+                    text-decoration: none;
+                    color: #334155;
+                    transition: all 0.2s;
+                }
+                .search-result-item:hover {
+                    background: #f8fafc;
+                    transform: translateX(4px);
+                }
+                .search-result-icon {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-right: 16px;
+                    font-size: 1.1rem;
+                }
+                .icon-policy { background: #eff6ff; color: #3b82f6; }
+                .icon-sop { background: #fefce8; color: #eab308; }
+                .icon-guideline { background: #f0fdf4; color: #22c55e; }
+                .icon-template { background: #fff7ed; color: #df7a1c; }
+                .icon-training { background: #f5f3ff; color: #8b5cf6; }
+                
+                .search-result-content { flex: 1; }
+                .search-result-title { font-weight: 600; font-size: 1.05rem; margin-bottom: 4px; }
+                .search-result-meta { font-size: 0.8rem; color: #64748b; }
+                .search-kbd-shortcut {
+                    text-align: center;
+                    padding: 12px;
+                    font-size: 0.8rem;
+                    color: #94a3b8;
+                    border-top: 1px solid #f1f5f9;
+                    background: #f8fafc;
+                }
+            </style>
+            <div class="modern-search-box">
+                <div class="modern-search-header">
+                    <i class="fa-solid fa-magifying-glass"></i>
+                    <input type="text" class="modern-search-input" placeholder="Search across all libraries...">
+                    <button class="modern-search-close">ESC</button>
+                </div>
+                <div class="modern-search-results">
+                    <!-- Results populate here -->
+                </div>
+                <div class="search-kbd-shortcut">Type to start searching across hundreds of dynamic documents.</div>
+            </div>
+        `;
+        document.body.appendChild(searchOverlay);
+
+        var modal = document.querySelector('.modern-search-box');
+        var inputField = searchOverlay.querySelector('.modern-search-input');
+        var resultsContainer = searchOverlay.querySelector('.modern-search-results');
+        var closeBtn = searchOverlay.querySelector('.modern-search-close');
+
+        function openSearch() {
+            searchOverlay.style.display = 'flex';
+            // Slight delay for transition effect
+            setTimeout(function() {
+                searchOverlay.style.opacity = '1';
+                modal.style.transform = 'scale(1)';
+                inputField.focus();
+                renderResults(''); // Show all top docs initially
+            }, 10);
+        }
+
+        function closeSearch() {
+            searchOverlay.style.opacity = '0';
+            modal.style.transform = 'scale(0.95)';
+            setTimeout(function() { searchOverlay.style.display = 'none'; }, 200);
+        }
+
+        // Intercept clicks on ANY search box on the homepage to launch the Modern Search
+        var originalSearchBars = document.querySelectorAll('input[placeholder*="Search"]');
+        originalSearchBars.forEach(function(bar) {
+            // Unbind old dropdown logic if any by cloning
+            bar.replaceWith(bar.cloneNode(true));
+        });
+        
+        // Re-select them fresh without old listeners
+        document.querySelectorAll('input[placeholder*="Search"]').forEach(function(cleanBar) {
+            cleanBar.setAttribute('readonly', 'true'); // Prevent typing in the fake box
+            cleanBar.style.cursor = 'text';
+            cleanBar.addEventListener('click', openSearch);
+            cleanBar.addEventListener('focus', openSearch);
+            // Replace magnifying glass icons visually to link to openSearch too
+            if (cleanBar.previousElementSibling && cleanBar.previousElementSibling.tagName === 'I') {
+                cleanBar.previousElementSibling.style.cursor = 'pointer';
+                cleanBar.previousElementSibling.addEventListener('click', openSearch);
+            }
+        });
+
+        closeBtn.addEventListener('click', closeSearch);
+        searchOverlay.addEventListener('click', function(e) {
+            if (e.target === searchOverlay) closeSearch();
+        });
+
+        // Keyboard escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && searchOverlay.style.display === 'flex') {
+                closeSearch();
+            }
+        });
+
+        // Render matching items into modal
+        function renderResults(query) {
+            resultsContainer.innerHTML = '';
+            var term = query.toLowerCase();
+            var matches = libraryDocs.filter(function(doc) {
+                return doc.name.toLowerCase().includes(term) || doc.meta.toLowerCase().includes(term);
             });
             
-            // Re-show when focused
-            input.addEventListener('focus', function() {
-                if(input.value.length >= 2 && dropdown.innerHTML !== '') {
-                    dropdown.style.display = 'block';
-                }
+            // Limit to 8 mostly to look sleek
+            var displayList = matches.slice(0, 8);
+
+            if (displayList.length === 0) {
+                resultsContainer.innerHTML = '<div style="padding: 24px; text-align: center; color: #94a3b8;">No documents found matching "' + query + '"</div>';
+                return;
+            }
+
+            displayList.forEach(function(doc) {
+                var iconClass = "icon-" + doc.type;
+                var iconHtml = '<i class="fa-regular fa-file-lines"></i>';
+                
+                var a = document.createElement('a');
+                a.className = "search-result-item";
+                a.href = doc.url;
+                a.innerHTML = 
+                    <div class="search-result-icon "></div>
+                    <div class="search-result-content">
+                        <div class="search-result-title"></div>
+                        <div class="search-result-meta"></div>
+                    </div>
+                    <i class="fa-solid fa-angle-right" style="color:#cbd5e1;"></i>
+                ;
+                resultsContainer.appendChild(a);
             });
+        }
+
+        // Live typing
+        inputField.addEventListener('input', function(e) {
+            renderResults(e.target.value);
         });
     });
     </script>
 </body>
 </html>
+
 
 
